@@ -2,12 +2,46 @@
 <html>
 <head>
   <title>Weather App</title>
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      font-family: Arial;
+      color: white;
+      text-align: center;
+      padding: 50px;
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      margin-right: 10px;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 10px;
+      background: #38bdf8;
+      color: black;
+      cursor: pointer;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 15px;
+    }
+  </style>
 </head>
-<body style="text-align:center; font-family:Arial; background:#0f172a; color:white; padding:50px;">
+
+<body>
 
 <h1>🌦 Weather App</h1>
 
-<input id="city" placeholder=" Baku ">
+<input id="city" placeholder="Şəhər yaz">
 <button onclick="getWeather()">Axtar</button>
 
 <div id="result"></div>
@@ -15,14 +49,21 @@
 <script>
 async function getWeather() {
   let city = document.getElementById("city").value;
+const API_KEY = "ce95c9ab837ae7e9f032fa9e3a64d43f";
 
-  let res = await fetch(`https://wttr.in/${city}?format=j1`);
+fetch(`https://api.openweathermap.org/data/2.5/weather?q=Baku&appid=${API_KEY}&units=metric`)
+  .then(res => res.json())
+  .then(data => console.log(data))
+  .catch(err => console.log(err));
+  
   let data = await res.json();
 
   document.getElementById("result").innerHTML = `
-    <h2>${city}</h2>
-    <p>🌡 Temp: ${data.current_condition[0].temp_C}°C</p>
-    <p>${data.current_condition[0].weatherDesc[0].value}</p>
+    <div class="card">
+      <h2>${city}</h2>
+      <p>🌡 Temp: ${data.current_condition[0].temp_C}°C</p>
+      <p>${data.current_condition[0].weatherDesc[0].value}</p>
+    </div>
   `;
 }
 </script>
